@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Fais toi plaiz</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #141e30, #243b55);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.card {
+    background: rgba(0,0,0,0.7);
+    padding: 40px;
+    border-radius: 15px;
+    width: 320px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(0,0,0,0.6);
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: #00c6ff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0072ff;
+    color: white;
+}
+
+.hidden {
+    display: none;
+}
+
+img {
+    width: 100%;
+    border-radius: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="formPage">
+    <h2>Accès requis</h2>
+    <input type="text" id="name" placeholder="Votre nom">
+    <div>
+        <input type="checkbox" id="terms">
+        <label for="terms">J'accepte les conditions</label>
+    </div>
+    <br>
+    <button onclick="validate()">Continuer</button>
+</div>
+
+<div class="card hidden" id="rickrollPage">
+    <h2 id="welcome"></h2
+    <img src="https://media.giphy.com/media/Vuw9m5wXviFIQ/giphy.gif">
+</div>
+
+<script>
+async function validate() {
+    const name = document.getElementById("name").value.trim();
+    const terms = document.getElementById("terms").checked;
+
+    if (!name) {
+        alert("Entrez un nom");
+        return;
+    }
+
+    if (!terms) {
+        alert("Donnez votre consentement");
+        return;
+    }
+
+    await fetch("/save-name", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name })
+    });
+
+    document.getElementById("formPage").classList.add("hidden");
+    document.getElementById("rickrollPage").classList.remove("hidden");
+    document.getElementById("welcome").innerText = "Bonjour " + name + " ! Fais toi plaiz !";
+}
+</script>
+
+</body>
+</html>
